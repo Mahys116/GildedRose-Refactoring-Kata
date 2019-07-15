@@ -29,6 +29,78 @@ describe GildedRose do
         expect(items[0].quality).to eq 0
       end
     end
+
+    context 'Aged Brie' do
+      it 'sell_in decrease' do
+        items = [Item.new('Aged Brie', 10, 10)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].sell_in).to eq 9
+      end
+
+      it 'quality max is 50' do
+        items = [Item.new('Aged Brie', 10, 50)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 50
+      end
+
+      it 'quality increase by 1' do
+        items = [Item.new('Aged Brie', 20, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 21
+      end
+
+      it 'quality increase by 2 if sell_in < 0' do
+        items = [Item.new('Aged Brie', 0, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 22
+      end
+    end
+
+    context 'Backstage passes to a TAFKAL80ETC concert' do
+      it 'sell_in decrease' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 10, 10)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].sell_in).to eq 9
+      end
+
+      it 'quality increase by 1 if sell_in > 10' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 21
+      end
+
+      it 'quality increase by 2 if sell_in > 5' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 7, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 22
+      end
+
+      it 'quality increase by 3 if sell_in <= 5' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 5, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 23
+      end
+
+      it 'quality is 0 if sell_in < 0' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 0, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 0
+      end
+    end
+
+    context 'Sulfuras, Hand of Ragnaros' do
+      it 'sell_in does not change' do
+        items = [Item.new('Sulfuras, Hand of Ragnaros', 0, 80)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].sell_in).to eq 0
+      end
+
+      it 'quality does not change' do
+        items = [Item.new('Sulfuras, Hand of Ragnaros', 0, 80)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 80
+      end
+    end
   end
 
 end
