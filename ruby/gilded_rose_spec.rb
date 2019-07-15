@@ -139,6 +139,26 @@ describe GildedRose do
         expect(items[0].quality).to eq 80
       end
     end
+
+    context 'Conjured Mana Cake' do
+      it 'sell_in decrease' do
+        items = [Item.new('Conjured Mana Cake', 10, 10)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].sell_in).to eq 9
+      end
+
+      it 'quality decrease by 2' do
+        items = [Item.new('Conjured Mana Cake', 10, 10)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 8
+      end
+
+      it 'quality decrease by 4 after sell date' do
+        items = [Item.new('Conjured Mana Cake', 0, 10)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 6
+      end
+    end
   end
 
 end
