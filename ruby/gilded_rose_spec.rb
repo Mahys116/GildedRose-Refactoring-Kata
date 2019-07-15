@@ -64,7 +64,7 @@ describe GildedRose do
       end
 
       it 'quality increase by 1 if sell_in > 10' do
-        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 20)]
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 14, 20)]
         GildedRose.new(items).update_quality()
         expect(items[0].quality).to eq 21
       end
@@ -76,7 +76,7 @@ describe GildedRose do
       end
 
       it 'quality increase by 3 if sell_in <= 5' do
-        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 5, 20)]
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 3, 20)]
         GildedRose.new(items).update_quality()
         expect(items[0].quality).to eq 23
       end
@@ -86,6 +86,44 @@ describe GildedRose do
         GildedRose.new(items).update_quality()
         expect(items[0].quality).to eq 0
       end
+
+      it 'quality increase by 1 if sell_in is 11' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 11, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 21
+      end
+
+      it 'quality increase by 2 if sell_in is 10' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 10, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 22
+      end
+
+      it 'quality increase by 2 if sell_in is 9' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 9, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 22
+      end
+
+      it 'quality increase by 2 if sell_in is 6' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 6, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 22
+      end
+
+      it 'quality increase by 3 if sell_in is 5' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 5, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 23
+      end
+
+      it 'quality increase by 3 if sell_in is 4' do
+        items = [Item.new('Backstage passes to a TAFKAL80ETC concert', 4, 20)]
+        GildedRose.new(items).update_quality()
+        expect(items[0].quality).to eq 23
+      end
+
+
     end
 
     context 'Sulfuras, Hand of Ragnaros' do
