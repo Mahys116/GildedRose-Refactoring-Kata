@@ -162,3 +162,10 @@ describe GildedRose do
   end
 
 end
+
+describe BaseItemUpdater do
+  it 'raise Not Implemented Error' do
+    item = Item.new('foo', 0, 0)
+    expect{BaseItemUpdater.update(item)}.to raise_error(NotImplementedError)
+  end
+end

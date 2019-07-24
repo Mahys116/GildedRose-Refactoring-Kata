@@ -6,29 +6,68 @@ class GildedRose
   end
 
   def update_quality
-    @items.each do |item|
-      item = case item.name
-             when 'Aged Brie' then                                 update_aged_brie(item)
-             when 'Backstage passes to a TAFKAL80ETC concert' then update_backstage_passes(item)
-             when 'Sulfuras, Hand of Ragnaros' then                update_sulfuras(item)
-             when 'Conjured Mana Cake' then                        update_conjured(item)
-             else update_item(item)
-      end
-    end
+    @items = @items.map { |item| update_item(item) }
   end
 
   private
 
-  def update_aged_brie(item)
+  def update_item(item)
+    case item.name
+    when 'Aged Brie' then                                 AgedBrieUpdater.update(item)
+    when 'Backstage passes to a TAFKAL80ETC concert' then BackstagePassesUpdater.update(item)
+    when 'Sulfuras, Hand of Ragnaros' then                item
+    when 'Conjured Mana Cake' then                        ConjuredItemUpdater.update(item)
+    else ItemUpdater.update(item)
+    end
+  end
+end
+
+class BaseItemUpdater
+  attr_accessor :item
+
+  def self.update(item)
+    new(item).update
+  end
+
+  def initialize(item)
+    @item = item
+  end
+
+  def update
+    update_sell_in!
+    update_quality!
+    @item
+  end
+
+  private
+
+  def update_sell_in!
     item.sell_in -= 1
+  end
+
+  def update_quality!
+    raise NotImplementedError, 'Implement this method in a child class'
+  end
+end
+
+class ItemUpdater < BaseItemUpdater
+  def update_quality!
+    item.quality -= 1
+    item.quality -= 1 if item.sell_in < 0
+    item.quality = 0 if item.quality < 0
+  end
+end
+
+class AgedBrieUpdater < BaseItemUpdater
+  def update_quality!
     item.quality += 1
     item.quality += 1 if item.sell_in < 0
     item.quality = 50 if item.quality > 50
-    item
   end
+end
 
-  def update_backstage_passes(item)
-    item.sell_in -= 1
+class BackstagePassesUpdater < BaseItemUpdater
+  def update_quality!
     if item.sell_in >= 0
       item.quality += 1
       item.quality += 1 if item.sell_in < 10
@@ -37,27 +76,14 @@ class GildedRose
     else
       item.quality = 0
     end
-    item
   end
+end
 
-  def update_sulfuras(item)
-    item
-  end
-
-  def update_conjured(item)
-    item.sell_in -= 1
+class ConjuredItemUpdater < BaseItemUpdater
+  def update_quality!
     item.quality -= 2
     item.quality -= 2 if item.sell_in < 0
     item.quality = 0 if item.quality < 0
-    item
-  end
-
-  def update_item(item)
-    item.sell_in -= 1
-    item.quality -= 1
-    item.quality -= 1 if item.sell_in < 0
-    item.quality = 0 if item.quality < 0
-    item
   end
 end
 
